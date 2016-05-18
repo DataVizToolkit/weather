@@ -48,3 +48,5 @@ end
 gem 'dotenv-rails', :groups => [:development, :test]
 gem 'puma'
 gem 'lograge'
+gem 'benchmark-ips', :group => :development
+gem 'ruby-prof', :group => :development
