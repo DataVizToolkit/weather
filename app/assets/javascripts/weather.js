@@ -33,6 +33,10 @@ function makeLineChart() {
     .append("g")
       .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
 
+  // add focus circles
+  var bisectDate = d3.bisector(function(d) { return d.reading_date; }).left,
+      focusMax = svg.append("g").style("display", "none");
+
   // fetch and process the data
   $.getJSON('/weather/data', function(data) {
     data = data.readings;
@@ -96,5 +100,39 @@ function makeLineChart() {
         .attr("x", 3)
         .attr("dy", ".35em")
         .text(function(d) { return d.reading_type; });
+
+    // append the circle at the intersection
+    focusMax.append("circle")
+        .attr("class", "y")
+        .style("fill", "none")
+        .style("stroke", "black")
+        .attr("r", 4);
+
+    // append a rectangle to capture mouse
+    svg.append("rect")
+        .attr("width", width)
+        .attr("height", height)
+        .style("fill", "none")
+        .style("pointer-events", "all")
+        .on("mouseover", function() {
+          focusMax.style("display", null);
+        })
+        .on("mouseout", function() {
+          focusMax.style("display", "none");
+        })
+        .on("mousemove", mousemove);
+
+    function mousemove() {
+      var x0    = x.invert(d3.mouse(this)[0]),
+          iMax  = bisectDate(readings[0].values, x0, 1),
+          d0Max = readings[0].values[iMax - 1],
+          d1Max = readings[0].values[iMax],
+          dMax  = x0 - d0Max.reading_date > d1Max.reading_date - x0 ? d1Max : d0Max;
+
+      focusMax.select("circle.y")
+          .attr("transform",
+                "translate(" + x(dMax.reading_date) + "," +
+                               y(dMax.reading_value) + ")");
+    }
   });
 }
