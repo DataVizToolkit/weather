@@ -127,6 +127,15 @@ function makeLineChart() {
         .attr("dx", 8)
         .attr("dy", "-.3em");
 
+    // append the line between the max and min temperature circles
+    focusMax.append("line")
+        .attr("class", "x")
+        .style("stroke", "black")
+        .style("stroke-dasharray", "3,3")
+        .style("opacity", 0.5)
+        .attr("y1", 0)
+        .attr("y2", height);
+
     // append a rectangle to capture mouse
     svg.append("rect")
         .attr("width", width)
@@ -174,6 +183,12 @@ function makeLineChart() {
           .attr("transform",
                 "translate(" + x(dMax.reading_date) + "," +
                                y(dMax.reading_value) + ")");
+
+      focusMax.select(".x")
+              .attr("transform",
+                    "translate(" + x(dMax.reading_date) + "," +
+                                   y(dMax.reading_value) + ")")
+                         .attr("y2", y(dMin.reading_value) - y(dMax.reading_value));
     }
   });
 }
