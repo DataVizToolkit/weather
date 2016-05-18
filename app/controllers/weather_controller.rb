@@ -3,7 +3,7 @@ class WeatherController < ApplicationController
   def data
     readings = WeatherReading.
       joins(:weather_station).
-      where(:reading_type => "TMAX").
+      where(:reading_type => ["TMAX", "TMIN"]).
       where("weather_stations.name = 'MILAN'").
       order("reading_type, reading_date").
       select("weather_readings.id, reading_date, reading_type, reading_value, source_flag, latitude, longitude, elevation, name")

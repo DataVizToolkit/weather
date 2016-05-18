@@ -17,7 +17,9 @@ function makeLineChart() {
 
   // helper functions for date formatting and color(s) for the line(s)
   var parseDate  = d3.time.format("%Y-%m-%d").parse,
-      color      = d3.scale.category10();
+      color      = d3.scale.ordinal()
+                     .domain(["TMAX", "TMIN"])
+                     .range(["red", "blue"]);
 
   // define the line(s) as a series of points from the data
   var line = d3.svg.line()
