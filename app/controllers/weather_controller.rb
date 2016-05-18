@@ -1,12 +1,8 @@
 class WeatherController < ApplicationController
   def index; end
   def data
-    readings = WeatherReading.
-      joins(:weather_station).
-      where(:reading_type => ["TMAX", "TMIN"]).
-      where("weather_stations.name = 'MILAN'").
-      order("reading_type, reading_date").
-      select("weather_readings.id, reading_date, reading_type, reading_value, source_flag, latitude, longitude, elevation, name")
+    year     = params[:year] || 1836
+    readings = WeatherReading.temps.for_station('MILAN').for_year(year).sorted
     render :json => { :readings => readings }
   end
 end
