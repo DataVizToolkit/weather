@@ -1,0 +1,21 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  station: MyString
+  reading_date: 2016-05-17
+  reading_type: MyString
+  reading_value: 1
+  measurement_flag: MyString
+  quality_flag: MyString
+  source_flag: MyString
+  observation_time: 1
+
+two:
+  station: MyString
+  reading_date: 2016-05-17
+  reading_type: MyString
+  reading_value: 1
+  measurement_flag: MyString
+  quality_flag: MyString
+  source_flag: MyString
+  observation_time: 1

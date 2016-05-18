@@ -1,0 +1,23 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  station_id: MyString
+  latitude: 1.5
+  longitude: 1.5
+  elevation: 1.5
+  state: MyString
+  name: MyString
+  gsn_flag: MyString
+  hcn_flag: MyString
+  wmo_id: MyString
+
+two:
+  station_id: MyString
+  latitude: 1.5
+  longitude: 1.5
+  elevation: 1.5
+  state: MyString
+  name: MyString
+  gsn_flag: MyString
+  hcn_flag: MyString
+  wmo_id: MyString
