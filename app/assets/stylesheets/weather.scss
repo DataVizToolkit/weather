@@ -18,3 +18,15 @@ body {
   stroke: steelblue;
   stroke-width: 1.5px;
 }
+
+// Heatmap
+.day {
+  fill: #fff;
+  stroke: #ccc;
+}
+
+.month {
+  fill: none;
+  stroke: #000;
+  stroke-width: 2px;
+}

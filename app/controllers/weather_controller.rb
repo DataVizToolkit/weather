@@ -5,4 +5,10 @@ class WeatherController < ApplicationController
     readings = WeatherReading.temps.for_station('MILAN').for_year(year).sorted
     render :json => { :readings => readings }
   end
+
+  def heatmap; end
+  def heatmap_data
+    data = WeatherReading.heatmap('ITE00100554')
+    render :json => data
+  end
 end
