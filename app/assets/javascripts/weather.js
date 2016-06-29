@@ -12,21 +12,21 @@ function makeLineChart() {
       height = 500 - margin.top - margin.bottom;
 
   // define accessors for the x and y values
-  var x     = d3.time.scale().range([0, width]),
-      y     = d3.scale.linear().range([height, 0]);
+  var x     = d3.scaleTime().range([0, width]),
+      y     = d3.scaleLinear().range([height, 0]);
 
   // setup the x and y axes
-  var xAxis = d3.svg.axis().scale(x).orient("bottom"),
-      yAxis = d3.svg.axis().scale(y).orient("left");
+  var xAxis = d3.axisBottom(x),
+      yAxis = d3.axisLeft(y);
 
   // helper functions for date formatting and color(s) for the line(s)
-  var parseDate  = d3.time.format("%Y-%m-%d").parse,
-      color      = d3.scale.ordinal()
+  var parseDate  = d3.timeParse("%Y-%m-%d"),
+      color      = d3.scaleOrdinal()
                      .domain(["TMAX", "TMIN"])
                      .range(["red", "blue"]);
 
   // define the line(s) as a series of points from the data
-  var line = d3.svg.line()
+  var line = d3.line()
       .x(function(d) { return x(d.reading_date); })
       .y(function(d) { return y(d.reading_value); });
 
@@ -203,7 +203,7 @@ function makeHeatMap() {
       cellSize = 17, // cell size
       // blue, green, yellow, orange, red
       colors   = ['#0000FF', '#00FF00', '#FFFF00', '#FFA500', '#FF0000'],
-      format   = d3.time.format("%Y-%m-%d"),
+      format   = d3.timeFormat("%Y-%m-%d"),
       decimal  = d3.format(".1f");
 
   // draw the year(s)
@@ -224,12 +224,12 @@ function makeHeatMap() {
 
   // fill in the calendar(s)
   var rect = svg.selectAll(".day")
-      .data(function(d) { return d3.time.days(new Date(d, 0, 1), new Date(d + 1, 0, 1)); })
+      .data(function(d) { return d3.timeDays(new Date(d, 0, 1), new Date(d + 1, 0, 1)); })
     .enter().append("rect")
       .attr("class", "day")
       .attr("width", cellSize)
       .attr("height", cellSize)
-      .attr("x", function(d) { return d3.time.weekOfYear(d) * cellSize; })
+      .attr("x", function(d) { return d3.timeWeek.count(d3.timeYear(d), d) * cellSize; })
       .attr("y", function(d) { return d.getDay() * cellSize; })
       .datum(format);
 
@@ -239,8 +239,8 @@ function makeHeatMap() {
 
   var monthPath = function(t0) {
     var t1 = new Date(t0.getFullYear(), t0.getMonth() + 1, 0),
-        d0 = t0.getDay(), w0 = d3.time.weekOfYear(t0),
-        d1 = t1.getDay(), w1 = d3.time.weekOfYear(t1);
+        d0 = t0.getDay(), w0 = d3.timeWeek.count(d3.timeYear(t0), t0),
+        d1 = t1.getDay(), w1 = d3.timeWeek.count(d3.timeYear(t1), t1);
     return "M" + (w0 + 1) * cellSize + "," + d0 * cellSize
         + "H" + w0 * cellSize + "V" + 7 * cellSize
         + "H" + w1 * cellSize + "V" + (d1 + 1) * cellSize
@@ -250,7 +250,7 @@ function makeHeatMap() {
 
   // darker line to separate the months of the year
   svg.selectAll(".month")
-      .data(function(d) { return d3.time.months(new Date(d, 0, 1), new Date(d + 1, 0, 1)); })
+      .data(function(d) { return d3.timeMonths(new Date(d, 0, 1), new Date(d + 1, 0, 1)); })
     .enter().append("path")
       .attr("class", "month")
       .attr("d", monthPath);
@@ -271,7 +271,7 @@ function makeHeatMap() {
       if (temperature > max) { max = temperature }
     });
 
-    var color = d3.scale.quantize().domain([min, max]).range(colors);
+    var color = d3.scaleQuantize().domain([min, max]).range(colors);
 
     rect.filter(function(key) { return key in data; })
         .style("fill", function(key) { return color(data[key].temperature); })
