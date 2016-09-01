@@ -100,8 +100,16 @@ function makeLineChart() {
 
     // append a label at the end of the line for the reading type
     station.append("text")
-        .datum(function(d) { return {reading_type: d.reading_type, value: d.values[d.values.length - 1]}; })
-        .attr("transform", function(d) { return "translate(" + x(d.value.reading_date) + "," + y(d.value.reading_value) + ")"; })
+        .datum(function(d) {
+          return {
+            reading_type: d.reading_type,
+            value: d.values[d.values.length - 1]
+          };
+        })
+        .attr("transform", function(d) {
+          return "translate(" + x(d.value.reading_date) + ","
+                              + y(d.value.reading_value) + ")";
+        })
         .attr("x", 3)
         .attr("dy", ".35em")
         .text(function(d) { return d.reading_type; });
@@ -192,7 +200,8 @@ function makeLineChart() {
               .attr("transform",
                     "translate(" + x(dMax.reading_date) + "," +
                                    y(dMax.reading_value) + ")")
-                         .attr("y2", y(dMin.reading_value) - y(dMax.reading_value));
+                         .attr("y2", y(dMin.reading_value) -
+                                     y(dMax.reading_value));
     }
   });
 }
@@ -224,12 +233,14 @@ function makeHeatMap() {
 
   // fill in the calendar(s)
   var rect = svg.selectAll(".day")
-      .data(function(d) { return d3.time.days(new Date(d, 0, 1), new Date(d + 1, 0, 1)); })
+      .data(function(d) {
+        return d3.time.days(new Date(d, 0, 1), new Date(d + 1, 0, 1));
+      })
     .enter().append("rect")
       .attr("class", "day")
       .attr("width", cellSize)
       .attr("height", cellSize)
-      .attr("x", function(d) { return d3.time.weekOfYear(d) * cellSize; })
+      .attr("x", function(d) { return d3.time.weekOfYear(d)*cellSize; })
       .attr("y", function(d) { return d.getDay() * cellSize; })
       .datum(format);
 
@@ -250,7 +261,9 @@ function makeHeatMap() {
 
   // darker line to separate the months of the year
   svg.selectAll(".month")
-      .data(function(d) { return d3.time.months(new Date(d, 0, 1), new Date(d + 1, 0, 1)); })
+      .data(function(d) {
+        return d3.time.months(new Date(d, 0, 1), new Date(d + 1, 0, 1));
+      })
     .enter().append("path")
       .attr("class", "month")
       .attr("d", monthPath);
@@ -274,8 +287,12 @@ function makeHeatMap() {
     var color = d3.scale.quantize().domain([min, max]).range(colors);
 
     rect.filter(function(key) { return key in data; })
-        .style("fill", function(key) { return color(data[key].temperature); })
+        .style("fill", function(key) {
+          return color(data[key].temperature);
+        })
       .select("title")
-        .text(function(key) { return key + ": " + decimal(data[key].temperature); });
+        .text(function(key) {
+          return key + ": " + decimal(data[key].temperature);
+        });
   });
 }
